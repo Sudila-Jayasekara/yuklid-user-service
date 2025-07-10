@@ -5,6 +5,7 @@ import com.yuklid.user_service.dto.AuthenticationResponse;
 import com.yuklid.user_service.dto.RegisterRequest;
 import com.yuklid.user_service.entity.Role;
 import com.yuklid.user_service.entity.User;
+import com.yuklid.user_service.exception.EmailAlreadyExistsException;
 import com.yuklid.user_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +27,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email already in use");
+            throw new EmailAlreadyExistsException("Email address already exists: " + request.getEmail());
         }
         User user = User.builder()
                 .firstName(request.getFirstName())
